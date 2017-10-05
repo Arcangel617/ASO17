@@ -52,3 +52,5 @@ archivos-<extension>en<directorioBusqueda>
 5) Escribir un script  5-procesos.sh que determine si un determinado proceso se encuentra en ejecución y muestra informacion detallada sobre el mismo a partir de informacion almacenada en el directorio proc.
 El nombre del proceso es ingresado por entrada estandar (no argumento).
 El script debera generar dentro del directorio doc un archivo conteniendo la información detallada.El archivo generado debera llamarse de la siguiente manera: proceso-<nombre_proceso>
+
+https://www.howtoforge.com/kvm-and-openvz-virtualization-and-cloud-computing-with-proxmox-ve
