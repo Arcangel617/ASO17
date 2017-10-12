@@ -9,9 +9,12 @@ Espacio para subir la actividad práctica sobre programación de scripts para sh
 Se deberá subir a esta actividad un archivo comprimido (gz,zip) que contenga un archivo por cada script solicitado.
 Además del código del script cada archivo deberá contener la siguiente documentación:
 
-> Autores: Comentario con los datos de los autores del script.
-> Fecha: Fecha de realización y versión.
-> Descripcion: Enunciado de lo que realiza el script.
+>Autores: Comentario con los datos de los autores del script.
+
+>Fecha: Fecha de realización y versión.
+
+>Descripcion: Enunciado de lo que realiza el script.
+
 >Acciones: en cada acción que realice el scrit se deberá documentar que acción realiza con comentarios oportunamente agregados entre lineas del código.
 
 Resolver los siguientes problemas utilizando programación de scripts para el shell Bash:
