@@ -12,7 +12,7 @@ function existeDirectorio(){
 if [ -e $DIRECTORIO ]; then
   echo "Existe el directorio "
 else
-  echo "Falló al no crearse $DIRECTORIO"  # Tal vez convenga mejor que "cree" el directorio en vez de terminar el script
+  echo "Falló al no crearse $DIRECTORIO"  # Tal vez convenga mejor que lo cree al directorio en vez de terminar el script
   exit 1
 fi
 }
