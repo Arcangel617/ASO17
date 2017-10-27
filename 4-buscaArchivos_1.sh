@@ -52,8 +52,12 @@ function existeDirectorio(){
 if [ -e $DIRECTORIO ]; then
    echo "Existe el directorio."
 else
-   echo "1-directorios.sh falló al no crear el directorio $DIRECTORIO"
-   exit 1
+   #echo "1-directorios.sh falló al no crear el directorio $DIRECTORIO"
+   #exit 1
+
+   # Lo ideal sería que no se corte la ejecución, por lo tanto si no existe el directorio, que lo cree.
+   echo "Creando directorio..."
+   mkdir ./doc
 fi
 }
 
@@ -66,7 +70,7 @@ function permisoArchivo(){
 
 cd ./bin
 
-if [ -x 4-buscaArchivos.sh ]; then  # Para realizar las pruebas cambiar 4-buscaArchivos.sh por rutinaS4.sh
+if [ -x '4-buscaArchivos_1.sh' ]; then  # Para realizar las pruebas cambiar 4-buscaArchivos.sh por rutinaS4.sh
    echo "Tengo permisos de ejecución."
 else
    echo "¡Error! No se otorgaron los permisos de ejecución."
@@ -82,14 +86,17 @@ fi
 
 function crearArchivoInforme(){
 
-cd ./../$DIRECTORIO    #Desde el directorio donde estoy actualmente voy al directorio doc/ para crear el archivo
+#cd ./$DIRECTORIO    #Desde el directorio donde estoy actualmente voy al directorio doc/ para crear el archivo
 
 if [ -f $ARCHIVOSOPORTE ]; then
-   echo "¡Error! El archivo \"$ARCHIVOSOPORTE\" ha sido creado antes."
-   exit 3
+   #echo "¡Error! El archivo \"$ARCHIVOSOPORTE\" ha sido creado antes."
+   rm ./doc/$ARCHIVOSOPORTE
+   echo "Creando el archivo para el informe."
+   touch ./doc/$ARCHIVOSOPORTE
+   #exit 3
 else
    echo "Creando el archivo para el informe."
-    touch $ARCHIVOSOPORTE
+   touch ./doc/$ARCHIVOSOPORTE
 fi 
 
 }
@@ -99,19 +106,19 @@ fi
 #
 
 function encuentraExtensionDirectorio(){
-
-if [ -d $DIRECTORIOBUSQUEDA ]; then
-   echo "El directorio existe y es válidos."
-   ( find "$DIRECTORIOBUSQUEDA" -type f -iname "$EXTENSION" ) && 
-   ( find "$DIRECTORIOBUSQUEDA" -type f -iname "$EXTENSION" ) >> $ARCHIVOSOPORTE
-else
-   echo "No existe el directorio."
-   exit 3
-fi
+   if [ -d $DIRECTORIOBUSQUEDA ]; then
+      echo "El directorio existe y es válido."
+      #( find "$DIRECTORIOBUSQUEDA" -type f -iname "*.$EXTENSION" ) && 
+      #( find "$DIRECTORIOBUSQUEDA" -type f -iname "*.$EXTENSION" ) >> ./doc/$ARCHIVOSOPORTE
+      find "$DIRECTORIOBUSQUEDA" -type f -iname "*.$EXTENSION" >> ./doc/$ARCHIVOSOPORTE
+   else
+      echo "No existe el directorio."
+      exit 3
+   fi
 }
 
-existeDirectorio
-permisoArchivo
+existeDirectorio # se verifica si existe el directorio donde se guardará el archivo de salida
+#permisoArchivo
 crearArchivoInforme
 encuentraExtensionDirectorio
 
