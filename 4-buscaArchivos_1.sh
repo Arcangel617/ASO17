@@ -3,7 +3,7 @@
 #
 #DOCUMENTACIÓN:
 #
-#Autores: Sabadini, Pablo; Hernandez, Maximiliano; Aquino, Pablo; Hipper, Brenda; Artiguez, Arcangel; Moglia, Franco
+#Autores: Sabadini, Pablo; Hernandez, Maximiliano; Aquino, Pablo; Hipper, Brenda; Artigue, Arcangel; Moglia, Franco
 #Fecha de Entrega: 28/10/2017 Version 1.0
 #Descripción:
 #
@@ -27,18 +27,23 @@ EXTENSION=$2
 ARCHIVOSOPORTE="archivo-<$EXTENSION>en<"$(echo $DIRECTORIOBUSQUEDA | tr / -)">"
 DIRECTORIO=./doc/
 
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 #
 #Si no nos pasa ningun parámetro el programa se cierra
 #
 
 if [ $# -eq 0 ]; then
-   echo "Necesito parámetros para ejecutarme."
+   echo -e "--> ${RED}Necesito parámetros para ejecutarme.${NC}"
    exit 1
-elif [ $# -gt 2 ]; then
-   echo "Solo requiero dos parámetros."
+elif [ $# -lt 2 ]; then
+   echo -e "--> ${RED}Solo requiero dos parámetros.${NC}"
    exit 2
 else
-   echo "Cantidad de parámetros correcta."
+   echo -e "--> ${YELLOW}Cantidad de parámetros correcta.${NC}"
 fi
 
 
@@ -49,56 +54,27 @@ fi
 
 function existeDirectorio(){
 
+echo -e "--> ${YELLOW}Creando directorio...${NC}"
 if [ -e $DIRECTORIO ]; then
-   echo "Existe el directorio."
+   echo -e "--> ${GREEN}El directorio ya existe!${NC}"
 else
-   #echo "1-directorios.sh falló al no crear el directorio $DIRECTORIO"
-   #exit 1
-
-   # Lo ideal sería que no se corte la ejecución, por lo tanto si no existe el directorio, que lo cree.
-   echo "Creando directorio..."
    mkdir ./doc
 fi
 }
-
-#
-#Vamos a preguntar si nosotros nos podemos ejecutar
-#dentro del directorio
-#
-
-function permisoArchivo(){
-
-cd ./bin
-
-if [ -x '4-buscaArchivos_1.sh' ]; then  # Para realizar las pruebas cambiar 4-buscaArchivos.sh por rutinaS4.sh
-   echo "Tengo permisos de ejecución."
-else
-   echo "¡Error! No se otorgaron los permisos de ejecución."
-   exit 2
-fi
-
-}
-
 
 #
 #Vamos a crear el archivo que guardará el informe
 #
 
 function crearArchivoInforme(){
-
-#cd ./$DIRECTORIO    #Desde el directorio donde estoy actualmente voy al directorio doc/ para crear el archivo
-
-if [ -f $ARCHIVOSOPORTE ]; then
-   #echo "¡Error! El archivo \"$ARCHIVOSOPORTE\" ha sido creado antes."
-   rm ./doc/$ARCHIVOSOPORTE
-   echo "Creando el archivo para el informe."
-   touch ./doc/$ARCHIVOSOPORTE
-   #exit 3
-else
-   echo "Creando el archivo para el informe."
-   touch ./doc/$ARCHIVOSOPORTE
-fi 
-
+   if [ -f $ARCHIVOSOPORTE ]; then
+      rm ./doc/$ARCHIVOSOPORTE # si el archivo ya existe lo borra y crea uno nuevo
+      echo -e "--> ${YELLOW}Creando el archivo para el informe...${NC}"
+      touch ./doc/$ARCHIVOSOPORTE
+   else
+      echo -e "--> ${YELLOW}Creando el archivo para el informe...${NC}"
+      touch ./doc/$ARCHIVOSOPORTE
+   fi
 }
 
 #
@@ -107,20 +83,18 @@ fi
 
 function encuentraExtensionDirectorio(){
    if [ -d $DIRECTORIOBUSQUEDA ]; then
-      echo "El directorio existe y es válido."
-      #( find "$DIRECTORIOBUSQUEDA" -type f -iname "*.$EXTENSION" ) && 
-      #( find "$DIRECTORIOBUSQUEDA" -type f -iname "*.$EXTENSION" ) >> ./doc/$ARCHIVOSOPORTE
       find "$DIRECTORIOBUSQUEDA" -type f -iname "*.$EXTENSION" >> ./doc/$ARCHIVOSOPORTE
+      echo -e "--> ${GREEN}Terminado!.${NC}"
    else
-      echo "No existe el directorio."
+      echo -e "--> ${RED}No existe el directorio.${NC}"
+      echo "El directorio no existe" >> ./doc/$ARCHIVOSOPORTE
+      echo -e "--> ${GREEN}Terminado!.${NC}"
       exit 3
    fi
 }
 
-existeDirectorio # se verifica si existe el directorio donde se guardará el archivo de salida
-#permisoArchivo
+existeDirectorio
 crearArchivoInforme
 encuentraExtensionDirectorio
-
 
 exit 0
