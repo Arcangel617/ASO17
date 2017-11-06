@@ -10,10 +10,8 @@
 #Fecha de Entrega: 28/10/2017 Version 1.0
 #Descripción:
 #
-#Escribir un script 4-buscaArchivos.sh que busque de manera recursiva en un directorio recibido como 
-parametro 
-#todos los archivos con una determinada extensión, tambien recibido como parámetro. El script debera 
-verificar 
+#Escribir un script 4-buscaArchivos.sh que busque de manera recursiva en un directorio recibido como parametro 
+#todos los archivos con una determinada extensión, tambien recibido como parámetro. El script debera verificar 
 #que sea un directorio válido, exista y mostrar por salida estandar los archivos encontrados con su 
 #ruta completa o absoluta.
 #Ademas deberá generar dentro del directorio doc un archivo conteniendo la misma información.
@@ -35,7 +33,7 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-DIRECTORIO="$PWD/doc"
+DIRECTORIO="$PWD/../doc"
 
 #
 #Primero armamos los parámetros de la búsqueda y se los pasará por consola
@@ -109,10 +107,8 @@ function encuentraExtensionDirectorio(){
 
 if [ -d $DIRECTORIOBUSQUEDA ]; then 
    echo -e "--> ${GREEN}El directorio existe y es válidos.${NC}"
-   ( find $DIRECTORIOBUSQUEDA -type f -iname "$EXTENSION" -print 2>&1 | fgrep -v "Permiso denegado" ) 
-&& 
-   ( find $DIRECTORIOBUSQUEDA -type f -iname "$EXTENSION" -print 2>&1 | fgrep -v "Permiso denegado" ) 
->> $DIRECTORIO/$ARCHIVOSOPORTE 
+   ( find $DIRECTORIOBUSQUEDA -type f -iname "$EXTENSION" -print 2>&1 | fgrep -v "Permiso denegado" ) && 
+   ( find $DIRECTORIOBUSQUEDA -type f -iname "$EXTENSION" -print 2>&1 | fgrep -v "Permiso denegado" ) >> $DIRECTORIO/$ARCHIVOSOPORTE 
 else
    echo -e "--> ${RED}No existe el directorio.${NC}"
    exit 1 

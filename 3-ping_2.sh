@@ -41,7 +41,7 @@ NC='\033[0m' # No Color
 #
 #
 
-DIRECTORIO="$PWD/doc"
+DIRECTORIO="$PWD/../doc"
 
 HOST=$1   #IP o FQDN
 TIEMPO=$2

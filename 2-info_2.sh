@@ -34,7 +34,7 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-DIRECTORIO="$PWD/doc"
+DIRECTORIO="$PWD/../doc"
 
 #
 #Obliga que exista el directorio doc/
@@ -90,25 +90,19 @@ echo "** DETALLANDO EL HARDWARE DEL SISTEMA **" > $DIRECTORIO/INFO.sistema
 
 ( echo -e "\n** VERSION DEL SO:" && lsb_release -a ) >> $DIRECTORIO/INFO.sistema     
 
-( echo -e "\n** HARDWARE: a) INFORMACIÓN SOBRE EL PROCESADOR:" && lscpu |  grep -e "Arquitectura" -e 
-"CPU" -e "ID" -e "Virtualizacion" -e "Caché" ) >> $DIRECTORIO/INFO.sistema
+( echo -e "\n** HARDWARE: a) INFORMACIÓN SOBRE EL PROCESADOR:" && lscpu |  grep -e "Arquitectura" -e "CPU" -e "ID" -e "Virtualizacion" -e "Caché" ) >> $DIRECTORIO/INFO.sistema
 
-( echo -e "\n             b) INFORMACIÓN SOBRE LA MEMORIA:" && free -h -l -t ) >> 
-$DIRECTORIO/INFO.sistema
+( echo -e "\n             b) INFORMACIÓN SOBRE LA MEMORIA:" && free -h -l -t ) >> $DIRECTORIO/INFO.sistema
 
-( echo -e "\n             c) INFORMACIÓN SOBRE LOS PERIFÉRICOS:" && lsusb ) >> 
-$DIRECTORIO/INFO.sistema   
+( echo -e "\n             c) INFORMACIÓN SOBRE LOS PERIFÉRICOS:" && lsusb ) >> $DIRECTORIO/INFO.sistema   
 
-( echo -e "\n             d) OTROS DISPOSITIVOS DEL SISTEMA:" && lspci -nn ) >> 
-$DIRECTORIO/INFO.sistema    
+( echo -e "\n             d) OTROS DISPOSITIVOS DEL SISTEMA:" && lspci -nn ) >> $DIRECTORIO/INFO.sistema    
 
 ( echo -e "\n** ESPACIO EN DISCO:" && fdisk -l ) >> $DIRECTORIO/INFO.sistema  
 
-( echo -e "\n** INFORMACIÓN AMPLIADA SOBRE EL DISCO:" && lsblk -a -f -l -m -p -S -t && blkid ) >> 
-$DIRECTORIO/INFO.sistema
+( echo -e "\n** INFORMACIÓN AMPLIADA SOBRE EL DISCO:" && lsblk -a -f -l -m -p -S -t && blkid ) >> $DIRECTORIO/INFO.sistema
 
-( echo -e "\n** PARTICIONES MONTADAS:" && cat /etc/fstab | grep -e "noatime" ) >> 
-$DIRECTORIO/INFO.sistema
+( echo -e "\n** PARTICIONES MONTADAS:" && cat /etc/fstab | grep -e "noatime" ) >> $DIRECTORIO/INFO.sistema
 
 }
 

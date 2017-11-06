@@ -21,20 +21,14 @@
 #
 #ACLARACIÓN SOBRE ESTE SCRIPT
 #
-#Antes de ejecutar este script se podría correr por consola el comando "$ps -A" para ver una lista de 
-los procesos que están activos
-#y conocer sus nombres, ya que este script está a la espera de un nombre de proceso y no un número, en 
-su primera parte.
-#Una vez identificado el proceso el script con el comando pidof y el nombre del proceso lanza otra 
-lista con números
+#Antes de ejecutar este script se podría correr por consola el comando "$ps -A" para ver una lista de los procesos que están activos
+#y conocer sus nombres, ya que este script está a la espera de un nombre de proceso y no un número, en su primera parte.
+#Una vez identificado el proceso el script con el comando pidof y el nombre del proceso lanza otra lista con números
 #que el usuario nuevamente podrá elegir para pasar a la parte del contenido
-#Otra lista se desplegará, y esta se corresponde con los directorios numerados de la carpeta /proc/ y 
-a su vez cada
+#Otra lista se desplegará, y esta se corresponde con los directorios numerados de la carpeta /proc/ y a su vez cada
 #proceso contiene como información dentro de si mismo.
-#Algunos posibles contenidos que se pueden ver con este script pueden ser "status", "stat", "statm". 
-Otros pueden ser directorios
-#que contienen más información o bien pueden ser archivos, directorios o enlaces simbolicos a otros 
-directorios fuera de /proc
+#Algunos posibles contenidos que se pueden ver con este script pueden ser "status", "stat", "statm". Otros pueden ser directorios
+#que contienen más información o bien pueden ser archivos, directorios o enlaces simbolicos a otros directorios fuera de /proc
 #que no pueden tener acceso permitido para el usuario o quien lo esté revisando en ese momento.
 #
 #
@@ -51,7 +45,7 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-DIRECTORIO="$PWD/doc"
+DIRECTORIO="$PWD/../doc"
 
 function validaProcesos(){
 
