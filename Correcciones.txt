@@ -1,0 +1,14 @@
+Muy Bien.  muy bueno la idea de armar funciones .
+
+Corregir lo siguiente en los scripts: 
+
+
+1. muy bien
+
+2. fallo de path a directorios y archivo creado. no genera archivo. hacer generico
+
+3. muy bien, no importa si el archivo existe, agreguen a info al final
+
+4. errores de path a archivo a crear. no genera contenido en archivo. mal nombre de archivo, con comilla
+
+5. muy bien, el desarrollo del script, pero sgue problemas de path y archivos generados. Revisa variable directorio al inicio y su uso posterior 
