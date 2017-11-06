@@ -46,22 +46,19 @@ NC='\033[0m' # No Color
 #
 #
 
-#DIRECTORIO1="/tmp/bin/"                  #Esta forma donde se ejecuten todos los script se van a 
-crear los directorios
+#DIRECTORIO1="/tmp/bin/"                  
 #DIRECTORIO2="/tmp/doc/"
 #DIRECTORIO3="/tmp/script/"
 
 DIRECTORIO="$PWD"
 
-#COMANDO="/bin/mkdir $DIRECTORIO1 $DIRECTORIO2 $DIRECTORIO3"    #Esta variable es el comando para 
-crear los directorios
+#COMANDO="/bin/mkdir $DIRECTORIO1 $DIRECTORIO2 $DIRECTORIO3"   
 
 COMANDO="/bin/mkdir $DIRECTORIO/bin $DIRECTORIO/doc $DIRECTORIO/script"
 
-function estructuraDirectorio(){     #Inicio de la primera función
+function estructuraDirectorio(){     
 
-if $COMANDO                          #Mientras los directorios no existan serán creados, si existen de 
-antemano se cierra script
+if $COMANDO                          
    then
    echo -e "--> ${GREEN}Los directorios 
    \"bin/\";\"doc/\" y \"script/\" fueron creados.${NC}"
@@ -70,42 +67,37 @@ else
    exit 1   #Código de error para una futura documentación
 fi
 
-echo -e "--> ${GREEN}Creando los enlaces simbólicos.${NC}"     #Crea los enlaces a los directorios, en 
-el directorio actual donde se están corriendo los scripts
+echo -e "--> ${GREEN}Creando los enlaces simbólicos.${NC}"  
 ln -s /etc ./etc
 ln -s /var/log ./log
             
-}                                            #Fin de la primera función
+}                                            
 
-function copiarArchivos(){                   #Inicio de la segunda función
+function copiarArchivos(){                  
 
 #cp -r *.sh ./script/
 #cp -r ./script/*.* ./bin/
 
-mv *.sh ./script/                            #Mueve todos los archivos que están en el directorio 
+mv *.sh ./script/                            
 actual a la carpeta script/
-cp -r ./script/*.* ./bin/                    #Copia todos los archivos que están en el directorio 
-script/ al directorio bin/ desde la ubicación actual
+cp -r ./script/*.* ./bin/             
 
 
-}                                            #Fin de la segunda función
+}                                     
 
-#function darPermisos(){                      #Inicio de la tercera función
+#function darPermisos(){                      
 
-#if [ -x $DIRECTORIO3 ]; then                                #El condición pregunta si el directorio 
-script/ tiene permisos de ejecución (cuando se lo creo)
+#if [ -x $DIRECTORIO3 ]; then                               
 #   echo -e "--> ${GREEN}Los archivos\
 #   del directorio \"script/\" ya son ejecutables.${NC}"
-#   chmod ugo+x $DIRECTORIO3/*.sh                            #Se le otorgan los permisos de ejecución 
-a todos los archivos que son copias a la carpeta script
+#   chmod ugo+x $DIRECTORIO3/*.sh                           
 #else
 #   echo -e "--> ${RED}Error! No tengo \
-#   permiso de acceso a $DIRECTORIO3."  #Mensaje por stdout si ocurre un error
-#   exit 2               #Código de error para una futura documentación
+#   permiso de acceso a $DIRECTORIO3."  
+#   exit 2              
 #fi
 
-#if [ -x $DIRECTORIO1 ]; then                                  #La misma condición para el directorio 
-bin/
+#if [ -x $DIRECTORIO1 ]; then                                
 #   chmod 644 $DIRECTORIO1/*.sh
 #   echo -e "--> ${GREEN}Los archivos\
 #   del directorio \"bin/\" ya son ejecutables.${NC}"
@@ -118,22 +110,19 @@ bin/
 
 #}
 
-function darPermisos(){                      #Inicio de la tercera función
+function darPermisos(){                     
 
-if [ -x $DIRECTORIO/script ]; then                                #El condición pregunta si el 
-directorio script/ tiene permisos de ejecución (cuando se lo creo)
+if [ -x $DIRECTORIO/script ]; then                                
    echo -e "--> ${GREEN}Los archivos 
    del directorio \"script/\" ya son ejecutables.${NC}"
-   chmod ugo+x $DIRECTORIO/script/*.sh                            #Se le otorgan los permisos de 
-ejecución a todos los archivos que son copias a la carpeta script
+   chmod ugo+x $DIRECTORIO/script/*.sh                          
 else
    echo -e "--> ${RED}Error! No tengo 
-   permiso de acceso a $DIRECTORIO/script."  #Mensaje por stdout si ocurre un error
-   exit 2               #Código de error para una futura documentación
+   permiso de acceso a $DIRECTORIO/script."  
+   exit 2               
 fi
 
-if [ -x $DIRECTORIO1 ]; then                                  #La misma condición para el directorio 
-bin/
+if [ -x $DIRECTORIO1 ]; then                                 
    chmod 644 $DIRECTORIO/bin/*.sh
    echo -e "--> ${GREEN}Los archivos 
    del directorio \"bin/\" ya son ejecutables.${NC}"
@@ -151,31 +140,22 @@ fi
 #
 #
 
-echo -e "--> ${YELLOW}Creando los directorios.${NC}"       #Mensaje por stdout para el usuario 
-avisando que los directorios se están creando si se tuvo existo anteriormente
-estructuraDirectorio                    #Llamado a la primera función
+echo -e "--> ${YELLOW}Creando los directorios.${NC}"       
+estructuraDirectorio                    
 
 echo -e "--> ${YELLOW}Moviendo los archivos \
-a los directorios \"bin/\" y \"script/\".${NC}"  #Mensahe por stdout para el usuario avisando que los 
-archivos se movieron
-copiarArchivos                          #Llamado a la segunda función
+a los directorios \"bin/\" y \"script/\".${NC}"
+copiarArchivos                          
 
-echo -e "--> ${YELLOW}Otorgando permisos:${NC}"              #Mensaje por stdout para el usuario 
-avisando que se están otorgando los permisos a los archivos si se tuvo exito
-darPermisos                             #Llamado a la tercera función
+echo -e "--> ${YELLOW}Otorgando permisos:${NC}"              
+darPermisos                             
 
 echo -e "--> ${YELLOW}Agregando a la variable \
-PATH los directorios \"bin/\" y \"script/\".${NC}"  #Mensaje por stdout para avisar sobre el último 
-paso a realizar con el script
+PATH los directorios \"bin/\" y \"script/\".${NC}"  
 
-export PATH=$PATH:$DIRECTORIO/bin/:$DIRECTORIO/script/    #Se trata de agregar al PATH de Linux los 
-directorios bin/ y script/
-echo $PATH              #Mostramos como está el PATH, dentro del script se agregaron los directorios, 
-fuera todo el ambiente no sufrio cambio alguno
-exec /bin/bash          #Ejecutamos un nuevo ambiente de bash para que estos cambios en la variable 
-permanezcan temporalmente y llamar a los demás scripts
-sleep 300               #Este comando hará que se mantenga por un cierto tiempo los cambios y así 
-poder ejecutar las demás rutinas
-
+export PATH=$PATH:$DIRECTORIO/bin/:$DIRECTORIO/script/   
+echo $PATH              
+exec /bin/bash          
+sleep 300               
 
 exit 0    #Código de existo del script
