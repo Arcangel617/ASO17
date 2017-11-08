@@ -2,7 +2,12 @@
 #
 #DOCUMENTACIÓN:
 #
-#Autores: Sabadini, Pablo; Hernandez, Maximiliano; Aquino, Pablo; Hipper, Brenda; Artigue, Arcangel; Moglia, Franco
+#Autores: Sabadini, Pablo
+#         Hernandez, Maximiliano
+#         Aquino, Pablo
+#         Hipper, Brenda
+#         Artigue, Arcangel
+#         Moglia, Franco
 #Fecha de Entrega: 28/10/2017 Version 1.0
 #Descripción:
 #
@@ -15,26 +20,33 @@
 #llamarse de la siguiente manera: proceso-<nombre_proceso>
 #
 #
+#ACLARACIÓN SOBRE ESTE SCRIPT
+#
+#Antes de ejecutar este script se podría correr por consola el comando "$ps -A" para ver una lista de los procesos que están activos
+#y conocer sus nombres, ya que este script está a la espera de un nombre de proceso y no un número, en su primera parte.
+#Una vez identificado el proceso el script con el comando pidof y el nombre del proceso lanza otra lista con números
+#que el usuario nuevamente podrá elegir para pasar a la parte del contenido
+#Otra lista se desplegará, y esta se corresponde con los directorios numerados de la carpeta /proc/ y a su vez cada
+#proceso contiene como información dentro de si mismo.
+#Algunos posibles contenidos que se pueden ver con este script pueden ser "status", "stat", "statm". Otros pueden ser directorios
+#que contienen más información o bien pueden ser archivos, directorios o enlaces simbolicos a otros directorios fuera de /proc
+#que no pueden tener acceso permitido para el usuario o quien lo esté revisando en ese momento.
+#
+#
 
-DIRECTORIO=./doc/
+#
+#Paleta de colores
+#
+#
+
 RED='\033[1;31m'
 GREEN='\033[1;32m'
+BROWN='\033[0;33m'
 YELLOW='\033[1;33m'
+CIAN='\033[1;36m'
 NC='\033[0m' # No Color
 
-#
-#Vamos a preguntar si existe la carpeta doc/
-#y si está vacía para agregar archivos
-#
-function existeDirectorio(){
-
-echo -e "--> ${YELLOW}Creando directorio...${NC}"
-if [ -e $DIRECTORIO ]; then
-   echo -e "--> ${GREEN}El directorio ya existe!${NC}"
-else
-   mkdir ./doc
-fi
-}
+DIRECTORIO="$PWD/../doc"
 
 function validaProcesos(){
 
@@ -44,8 +56,8 @@ function validaProcesos(){
 #
 #
 
-echo "Ingrese el nombre de un proceso:"
-read nombre_proceso  # guardamos lo que nos introduce por teclado
+echo -e -n "--> ${BROWN}Ingrese el nombre de un proceso:${NC} "
+read nombre_proceso 
 
 ARCHIVOSOPORTE="proceso-<$nombre_proceso>"
 
@@ -55,54 +67,111 @@ ARCHIVOSOPORTE="proceso-<$nombre_proceso>"
 #
 #
 
-#ps -A | grep $nombre_proceso
-pidof $nombre_proceso
+#ps -A | grep $nombre_proceso       
+echo -e "--> ${YELLOW}IDs: $(pidof $nombre_proceso)${NC}"
 
 valor=$?
 
-if [ $valor != 0 ]; then
-   echo -e "--> ${RED}No se encontró un proceso activo con ese nombre${NC}"
-   echo -e "--> ${GREEN}Terminado!${NC}"
-   exit
+#
+#Vamos a preguntar si realmente el valor que arroja pertenece a un proceso 
+#es decir =0(existe y esta en ejecucion) !=0(no es un proceso activo y si un archivo)
+#
+#
+
+if [[ $valor != 0 ]]; then
+   echo -e "--> ${BROWN}Es un archivo virtual con\
+   información sobre el sistema.${NC}" ; PROCESO=$nombre_proceso   
 else
-   
-   PID=$(pidof $nombre_proceso)
-   echo "========================================================" > ./doc/$ARCHIVOSOPORTE
-   echo "--> Información del proceso $PID" >> ./doc/$ARCHIVOSOPORTE
-   echo "========================================================" >> ./doc/$ARCHIVOSOPORTE
-   echo "--> /proc/$PID/status" >> ./doc/$ARCHIVOSOPORTE
-   echo "========================================================" >> ./doc/$ARCHIVOSOPORTE
-   cat /proc/$PID/status >> ./doc/$ARCHIVOSOPORTE
-   echo "========================================================" >> ./doc/$ARCHIVOSOPORTE
-   echo "--> /proc/$PID/stat" >> ./doc/$ARCHIVOSOPORTE
-   echo "========================================================" >> ./doc/$ARCHIVOSOPORTE
-   cat /proc/$PID/stat >> ./doc/$ARCHIVOSOPORTE
-   echo "========================================================" >> ./doc/$ARCHIVOSOPORTE
-   echo "--> /proc/$PID/statm" >> ./doc/$ARCHIVOSOPORTE
-   echo "========================================================" >> ./doc/$ARCHIVOSOPORTE
-   cat /proc/$PID/statm >> ./doc/$ARCHIVOSOPORTE
+   echo -e "--> ${GREEN}Es un proceso en ejecución.${NC}" ; PROCESO=$nombre_proceso 
+   echo -e -n "--> ${BROWN}Elija uno de los PID-o-ID\
+   del proceso para ver su contenido:${NC} "
+   read PID         
 fi
 
 }
 
-function crearArchivoInforme(){
-   if [ -f ./doc/$ARCHIVOSOPORTE ]; then
-      rm  ./doc/$ARCHIVOSOPORTE # si el archivo ya existe lo borra y crea uno nuevo
-      echo -e "--> ${YELLOW}Creando el archivo para el informe...${NC}"
-      # exit
-      touch ./doc/$ARCHIVOSOPORTE
-   else
-      echo -e "--> ${YELLOW}Creando el archivo para el informe...${NC}"
-      touch ./doc/$ARCHIVOSOPORTE
-   fi
+#
+#Obliga que exista el directorio doc/
+#en las ubicaciones donde se llame al script
+#
+#
+
+function existeDirectorio(){   
+
+if [ -e $DIRECTORIO ]; then     
+  echo -e "--> ${GREEN}OK.${NC}"
+else
+  echo -e "--> ${RED}¡Error de PATH! Estás dentro del \"doc/\" 
+  o bien no exite el directorio en este camino. 
+  Mostrando PATH:$PWD.${NC}"
+  exit 1
+fi
+
 }
 
+#
+#Se crea el archivo que guardará el informe
+#
+#
+
+function crearArchivoInforme(){
+
+
+if [ -f $DIRECTORIO/$ARCHIVOSOPORTE ]; then
+   echo -e "--> ${RED}¡Error! El archivo \"$ARCHIVOSOPORTE\" ha sido creado antes.${NC}"
+   exit 3
+else
+   echo -e "--> ${BROWN}Creando el archivo para el informe.${NC}"
+   touch $DIRECTORIO/$ARCHIVOSOPORTE  
+fi 
+
+}
+
+#
+#Vamos a ver los contenidos de cada proceso ya sea en ejecución o no
+#
+#
+
+function muestraContenido(){
+
+if [ -e /proc/$PROCESO ]; then                          
+   
+   echo -e "--> ${BROWN}La información se encuentra\
+   en \"$ARCHIVOSOPORTE\" generado en el directorio \"$DIRECTORIO\"."
+   
+   cat /proc/$PROCESO > $DIRECTORIO/$ARCHIVOSOPORTE
+
+else
+  
+   echo -e "--> ${BROWN}Mostrando el contenido del PID ${YELLOW}$PID${NC}"
+   ls -F /proc/$PID
+   
+   echo -e "--> ${BROWN}Elija un archivo (podrá ver su contenido en \"$ARCHIVOSOPORTE\" del directorio \"$DIRECTORIO\".)${NC} "
+   echo -e -n  "--> ${BROWN}Archivo:${NC} "
+   read CONTENIDO
+   
+   cat /proc/$PID/$CONTENIDO > $DIRECTORIO/$ARCHIVOSOPORTE 
+   
+   if [ -d /proc/$PID/$CONTENIDO ]; then
+      
+      echo -e "--> ${RED}No se pueden acceder 
+      a los directorios de los procesos o enlaces simbólicos.${NC}"
+      exit 1
+   fi
+fi
+
+echo -e "--> ${GREEN}Listo.${NC}"
+} 
+
+#
+#Llamado a las funciones
+#
+#
+
+validaProcesos
 existeDirectorio
 crearArchivoInforme
-validaProcesos
-echo "========================================================"
-echo -e "--> ${YELLOW}Leyendo informe${NC}"
-cat ./doc/$ARCHIVOSOPORTE
-echo -e "--> ${GREEN}Terminado!${NC}"
+muestraContenido
 
 exit 0
+
